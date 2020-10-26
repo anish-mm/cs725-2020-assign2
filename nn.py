@@ -100,7 +100,10 @@ def loss_mse(y, y_hat):
 	----------
 		MSE loss between y and y_hat.
 	'''
-	raise NotImplementedError
+	n = y.shape[0]
+	diff = y - y_hat
+	loss = diff.T.dot(diff) / n
+	return loss
 
 def loss_regularization(weights, biases):
 	'''
