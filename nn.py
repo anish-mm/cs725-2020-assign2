@@ -6,6 +6,7 @@ import pandas as pd
 np.random.seed(42)
 
 NUM_FEATS = 90
+WEIGHT_INIT_RANGE = (-1, 1)
 
 class Net(object):
 	'''
@@ -21,7 +22,12 @@ class Net(object):
 			num_layers : Number of HIDDEN layers.
 			num_units : Number of units in each Hidden layer.
 		'''
-		raise NotImplementedError
+		# initialize weights
+		f = np.random.uniform
+		self.biases = [f(*WEIGHT_INIT_RANGE) for i in range(num_layers)]
+		self.weights = [f(*WEIGHT_INIT_RANGE, num_units).reshape(num_units, 1) for i in range(num_layers)]
+
+
 
 	def __call__(self, X):
 		'''
