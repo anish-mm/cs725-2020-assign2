@@ -66,6 +66,8 @@ class Net(object):
 		self.biases = biases
 		self.layers = layers		
 
+		self.forward_pass_done = False
+
 	def __call__(self, X):
 		'''
 		Forward propagate the input X through the network,
@@ -78,7 +80,31 @@ class Net(object):
 		----------
 			y : Output of the network, numpy array of shape m x 1
 		'''
-		raise NotImplementedError
+
+		layers = self.layers
+
+		try:
+			for i, layer in enumerate(layers):
+				temp = X.dot(self.weights[i])
+				temp += self.biases[i]
+
+				# relu activation
+				temp = np.clip(temp, 0, None)
+
+				layer = temp
+
+			self.forward_pass_done = True
+
+		except Exception as e:
+			print(e)
+
+			# print context.
+			self.__summary()
+			print("X = {}".format(X))
+			print("Error occured while processing layer {}.".format(i))
+			
+			raise Exception
+
 
 	def backward(self, X, y, lamda):
 		'''
@@ -99,6 +125,9 @@ class Net(object):
 		Hint: You need to do a forward pass before performing bacward pass.
 		'''
 		raise NotImplementedError
+	
+	def __summary(self):
+		pass
 
 
 class Optimizer(object):
