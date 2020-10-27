@@ -153,7 +153,7 @@ class Optimizer(object):
 		Hint: You can use the class members to track various states of the
 		optimizer.
 		'''
-		raise NotImplementedError
+		self.learning_rate = learning_rate
 
 	def step(self, weights, biases, delta_weights, delta_biases):
 		'''
@@ -164,7 +164,11 @@ class Optimizer(object):
 			delta_weights: Gradients of weights with respect to loss.
 			delta_biases: Gradients of biases with respect to loss.
 		'''
-		raise NotImplementedError
+		for weight in weights:
+			weight -= self.learning_rate * delta_weights
+		
+		for bias in biases:
+			bias -= self.learning_rate * delta_biases
 
 
 def loss_mse(y, y_hat):
