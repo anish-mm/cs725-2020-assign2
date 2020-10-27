@@ -59,7 +59,7 @@ class Net(object):
 		layer = []
 
 		weights.append(weight)
-		biases.append(bias)
+		biases.append([bias])
 		layers.append(layer)
 
 		self.weights = weights
@@ -201,7 +201,20 @@ def loss_regularization(weights, biases):
 	----------
 		l2 regularization loss 
 	'''
-	raise NotImplementedError
+	reg = 0
+
+	for weight in weights:
+		# weight matrix for a layer. d|M -> M
+		l2_vecs = weight.T.dot(weight)
+		l2 = l2_vecs.T.dot(l2_vec)
+		reg += l2
+	
+	for bias in biases:
+		# bias vector for layer.
+		l2 = bias.dot(bias)
+		reg += l2
+	
+	return reg
 
 def loss_fn(y, y_hat, weights, biases, lamda):
 	'''
@@ -218,7 +231,7 @@ def loss_fn(y, y_hat, weights, biases, lamda):
 	----------
 		l2 regularization loss 
 	'''
-	raise NotImplementedError
+	return loss_mse(y, y_hat) + lamda * loss_regularization(weights, biases)
 
 def rmse(y, y_hat):
 	'''
@@ -233,7 +246,10 @@ def rmse(y, y_hat):
 	----------
 		RMSE between y and y_hat.
 	'''
-	raise NotImplementedError
+	n = y.shape[0]
+	diff = y - y_hat
+	loss = diff.T.dot(diff) / n
+	return np.sqrt(loss) 
 
 
 def train(
