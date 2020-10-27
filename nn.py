@@ -283,7 +283,7 @@ def get_test_data_predictions(net, inputs):
 		predictions (optional): Predictions obtained from forward pass
 								on test data, numpy array of shape m x 1
 	'''
-	raise NotImplementedError
+	return net(X)
 
 def read_data():
 	'''
