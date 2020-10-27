@@ -22,12 +22,49 @@ class Net(object):
 			num_layers : Number of HIDDEN layers.
 			num_units : Number of units in each Hidden layer.
 		'''
+		def relu(w):
+			return np.clip(w, 0, None)
+
 		# initialize weights
 		f = np.random.uniform
-		self.biases = [f(*WEIGHT_INIT_RANGE) for i in range(num_layers)]
-		self.weights = [f(*WEIGHT_INIT_RANGE, num_units).reshape(num_units, 1) for i in range(num_layers)]
+		
+		weights, biases, layers = [], [], []
 
+		# weight matrix for hidden layer 1 is of different size: d -> M.
+		if num_layers > 0:
+			weight = f(*WEIGHT_INIT_RANGE, (NUM_FEATS, num_units))
+			bias = f(*WEIGHT_INIT_RANGE, num_units)
+			layer = []
+			
+			weights.append(weight)
+			biases.append(bias)
+			layers.append(layer)
 
+		# more hidden layers if required.
+		for i in range(num_layers - 1):
+			weight = f(*WEIGHT_INIT_RANGE, (num_units, num_units))
+			bias = f(*WEIGHT_INIT_RANGE, num_units)
+			layer = []
+
+			weights.append(weight)
+			biases.append(bias)
+			layers.append(layer)
+		
+		# add final layer.
+		if num_layers > 0:
+			weight = f(*WEIGHT_INIT_RANGE, (num_units, 1))
+		else:
+			weight = f(*WEIGHT_INIT_RANGE, (NUM_FEATS, 1))
+		bias = f(*WEIGHT_INIT_RANGE, 1)
+		layer = []
+
+		weights.append(weight)
+		biases.append(bias)
+		layers.append(layer)
+
+		self.weights = weights
+		self.biases = biases
+		self.layers = layers		
 
 	def __call__(self, X):
 		'''
