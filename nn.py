@@ -127,7 +127,15 @@ class Net(object):
 		raise NotImplementedError
 	
 	def __summary(self):
-		pass
+		print("Network Summary.")
+
+		# print all the weight and bias shapes
+		print("Input: (n, d)")
+		prev = ("n", "d")
+		for i, weight in enumerate(self.weights):
+			print("Layer {}: weights: {}, biases: {}, output: {}"
+					.format(i + 1, weight.shape, self.biases[i].shape, (prev[0],) + weight.shape[1:]))
+		
 
 
 class Optimizer(object):
